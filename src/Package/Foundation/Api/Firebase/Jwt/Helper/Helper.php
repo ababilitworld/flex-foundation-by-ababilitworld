@@ -4,7 +4,7 @@ namespace Ababilitworld\FlexFoundationByAbabilitworld\Package\Foundation\Api\Fir
 
 (defined( 'ABSPATH' ) && defined( 'WPINC' )) || die();
 
-use Ababilitworld\FlexTraitByAbabilitworld\Trait\StaticTrait\StaticTrait;
+use Ababilitworld\FlexTraitByAbabilitworld\Standard\Standard;
 
 use Firebase\JWT\JWT as FireJWT;
 use Firebase\JWT\Key as FireJWTKEY;
@@ -15,11 +15,17 @@ use DomainException;
 use InvalidArgumentException;
 use UnexpectedValueException;
 
-if (!class_exists('Ababilitworld\FlexFoundationByAbabilitworld\Package\Foundation\Api\Firebase\Jwt\Helper\Helper')) 
+if (!class_exists(__NAMESPACE__.'\Helper')) 
 {
+    /**
+     * Class Helper
+     *
+     * @package \Ababilitworld\FlexFoundationByAbabilitworld\Package\Foundation\Api\Firebase\Jwt\Helper\Helper
+     */
     class Helper
     {
-        use StaticTrait;
+        use Standard;
+
         private static $key = "$?t.X] @ynuKCiy]zG!2E *1qRJ2|NCd 4;D21O%~P~RU^W@0K-=Ds2wj4s[OT_-";
 
         public static function generate_token($data, $expiration = 3600)

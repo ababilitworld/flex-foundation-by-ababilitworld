@@ -3,18 +3,18 @@
 
     (defined( 'ABSPATH' ) && defined( 'WPINC' )) || exit();
 
-    use Ababilitworld\FlexTraitByAbabilitworld\Trait\StaticTrait\StaticTrait;
+    use Ababilitworld\FlexTraitByAbabilitworld\Standard\Standard;
 
-	if ( ! class_exists( '\AbabilItWorld\FlexFoundationByAbabilitworld\Package\Foundation\Helper\Helper' ) ) 
+	if ( ! class_exists( __NAMESPACE__.'\Helper' ) ) 
 	{
 		/**
 		 * Class Helper
 		 *
-		 * @package AbabilItWorld\FlexFoundationByAbabilitworld\Helper
+		 * @package Ababilitworld\FlexFoundationByAbabilitworld\Package\Foundation\Helper\Helper
 		 */		
 		class Helper 
 		{
-            use StaticTrait;
+            use Standard;
             
 			public static function check_array_key_exists( $array, $keys ) 
 			{

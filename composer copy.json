@@ -24,6 +24,19 @@
         "ababilitworld/flex-trait-by-ababilitworld": "dev-main",
         "ababilitworld/flex-pagination-by-ababilitworld": "dev-main"
     },
+    "autoload": {
+        "psr-4": {
+            "Ababilitworld\\FlexFoundationByAbabilitworld\\": "src/"
+        },
+        "classmap": [
+            "src/"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Ababilitworld\\FlexFoundationByAbabilitworld\\Tests\\": "tests/"
+        }
+    },
     "repositories": [
         {
             "type": "vcs",
