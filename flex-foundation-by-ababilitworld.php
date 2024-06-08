@@ -1,12 +1,12 @@
 <?php
 
 	/**
-	 * FlexFoundation By Ababil IT World
+	 * Flex Foundation By Ababil IT World
 	 *
 	 * @package ababilitworld/flex-foundation-by-ababilitworld
 	 *
 	 * @wordpress-plugin
-	 * Plugin Name:       FlexFoundation By Ababil IT World
+	 * Plugin Name:       Flex Foundation By Ababil IT World
 	 * Plugin URI:        https://ababilitworld.com/wp-plugin/flex-foundation-by-ababilitworld
 	 * Description:       The AbabilItWorld Plugins's Foundation Funtionalities, Exclusively by Ababil IT World.
 	 * Version:           1.0.0
@@ -34,7 +34,7 @@
 
 	(defined('ABSPATH') && defined('WPINC')) || die();
 
-	require_once __DIR__ . '/vendor/autoload.php';
+	require_once __DIR__ . '/bootstrap.php';
 
 	defined( __NAMESPACE__.'\PLUGIN_NAME' ) || define( __NAMESPACE__.'\PLUGIN_NAME', plugin_basename(__FILE__) );
 	defined( __NAMESPACE__.'\PLUGIN_VERSION' ) || define( __NAMESPACE__.'\PLUGIN_VERSION', '1.0.0' );
@@ -44,20 +44,24 @@
 	defined( __NAMESPACE__.'\PLUGIN_PRE_UNDS' ) || define( __NAMESPACE__.'\PLUGIN_PRE_UNDS', 'flex_foundation_by_ababilitworld' );
 	defined( __NAMESPACE__.'\PLUGIN_PRE_HYPH' ) || define( __NAMESPACE__.'\PLUGIN_PRE_HYPH', 'flex-foundation-by-ababilitworld' );
 
+	//use Ababilitworld\FlexFoundationByAbabilitworld\Package\Package;
 	use function Ababilitworld\{
 		FlexFoundationByAbabilitworld\Package\package,
-		FlexFoundationByAbabilitworld\Package\Foundation\Debug\Error\Helper\helper as base_error_handler,
-		FlexFoundationByAbabilitworld\Package\Foundation\Helper\helper as base_helper,
-		FlexFoundationByAbabilitworld\Package\Foundation\Api\Firebase\Jwt\Helper\helper as jwt_helper
+		// FlexFoundationByAbabilitworld\Package\Foundation\Debug\Error\Helper\helper as base_error_handler,
+		// FlexFoundationByAbabilitworld\Package\Foundation\Helper\helper as base_helper,
+		// FlexFoundationByAbabilitworld\Package\Foundation\Api\Firebase\Jwt\Helper\helper as jwt_helper
 	};
 	
+	//new Package();
 	$package = package();
-	$base_helper = base_error_handler();
-	$base_helper = base_helper();
-	$jwt_helper = jwt_helper();
+	// $base_helper = base_error_handler();
+	// $base_helper = base_helper();
+	// $jwt_helper = jwt_helper();
 		
 	register_activation_hook(__FILE__, [$package, 'activate']);
 	register_deactivation_hook(__FILE__, [$package, 'deactivate']);
+
+?>
 
 	
 

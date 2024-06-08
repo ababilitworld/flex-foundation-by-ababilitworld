@@ -1,26 +1,32 @@
 <?php
-namespace Ababilitworld\FlexPortfolioByAbabilitworld\Package\Presentation\Template;
+namespace Ababilitworld\FlexFoundationByAbabilitworld\Package\Foundation\Pagination\Presentation\Pagination\Template;
 
 (defined('ABSPATH') && defined('WPINC')) || die();
 
-use Ababilitworld\FlexTraitByAbabilitworld\Trait\StaticTrait\StaticTrait;
+use Ababilitworld\FlexTraitByAbabilitworld\Standard\Standard;
 use function Ababilitworld\{
     FlexPackageInfoByAbabilitworld\Package\Service\service as plugin_info,
-    FlexPortfolioByAbabilitworld\Package\package as package,
+    FlexFoundationByAbabilitworld\Package\package as package,
 };
 
-if (!class_exists('\Ababilitworld\FlexPortfolioByAbabilitworld\Package\Presentation\Template\Template')) 
+use const Ababilitworld\{
+    FlexFoundationByAbabilitworld\PLUGIN_NAME,
+    FlexFoundationByAbabilitworld\PLUGIN_FILE,
+    FlexFoundationByAbabilitworld\PLUGIN_DIR,
+    FlexFoundationByAbabilitworld\PLUGIN_URL,
+    FlexFoundationByAbabilitworld\PLUGIN_VERSION,
+    FlexFoundationByAbabilitworld\PLUGIN_PRE_HYPH,
+    FlexFoundationByAbabilitworld\PLUGIN_PRE_UNDS,
+};
+
+if (!class_exists(__NAMESPACE__.'\Template')) 
 {
     class Template 
     {
-        use StaticTrait;
-
-        private $package;
-        private $template_url;
+        use Standard;
 
         public function __construct() 
         {
-            $this->package = package();
             add_action('admin_enqueue_scripts', array($this, 'enqueue_scripts' ) );
             add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts' ) );
         }
@@ -28,30 +34,30 @@ if (!class_exists('\Ababilitworld\FlexPortfolioByAbabilitworld\Package\Presentat
         public function enqueue_scripts()
         {
             wp_enqueue_style(
-                $this->package::$package_pre_hyph . '-template-style', 
-                $this->package::$package_url . '/Presentation/Template/Asset/css/style.css',
+                PLUGIN_PRE_HYPH . '-template-style', 
+                PLUGIN_URL . '/src/Foundation/Pagination/Presentation/Pagination/Template/Asset/css/style.css',
                 array(), 
                 time()
             );
 
             wp_enqueue_script(
-                $this->package::$package_pre_hyph . '-template-script', 
-                $this->package::$package_url . '/Presentation/Template/Asset/js/script.js',
+                PLUGIN_PRE_HYPH . '-template-script', 
+                PLUGIN_URL . '/src/Foundation/Pagination/Presentation/Pagination/Template/Asset/js/script.js',
                 array(), 
                 time(), 
                 true
             );
             
             wp_localize_script(
-                $this->package::$package_pre_hyph . '-template-script', 
-                $this->package::$package_pre_unds . '_template_localize', 
+                PLUGIN_PRE_HYPH . '-template-script', 
+                PLUGIN_PRE_UNDS . '_template_localize', 
                 array(
                     'adminAjaxUrl' => admin_url('admin-ajax.php'),
                     'ajaxUrl' => admin_url('admin-ajax.php'),
-                    'ajaxNonce' => wp_create_nonce($this->package::$package_pre_unds . '_nonce'),
-                    'ajaxAction' => $this->package::$package_pre_unds . '_action',
-                    'ajaxData' => $this->package::$package_pre_unds . '_data',
-                    'ajaxError' => $this->package::$package_pre_unds . '_error',
+                    'ajaxNonce' => wp_create_nonce(PLUGIN_PRE_UNDS . '_nonce'),
+                    'ajaxAction' => PLUGIN_PRE_UNDS . '_action',
+                    'ajaxData' => PLUGIN_PRE_UNDS . '_data',
+                    'ajaxError' => PLUGIN_PRE_UNDS . '_error',
                 )
             );
         }

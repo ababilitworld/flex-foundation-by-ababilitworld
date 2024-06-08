@@ -3,13 +3,18 @@
 
     (defined( 'ABSPATH' ) && defined( 'WPINC' )) || die();
 
-	use Ababilitworld\FlexTraitByAbabilitworld\Trait\StaticTrait\StaticTrait;
+	use Ababilitworld\FlexTraitByAbabilitworld\Standard\Standard;
 	
-	if ( ! class_exists( '\Ababilitworld\FlexFoundationByAbabilitworld\Package\Foundation\Foundation\Debug\Error\Helper\Helper' ) ) 
+	if ( ! class_exists( __NAMESPACE__.'\Helper' ) ) 
 	{
+		/**
+		 * Class Helper
+		 *
+		 * @package \Ababilitworld\FlexFoundationByAbabilitworld\Package\Foundation\Debug\Error\Helper\Helper
+		 */
 		class Helper 
 		{
-			use StaticTrait;
+			use Standard;
 			
 			public $wp_error;
 
@@ -40,7 +45,7 @@
 		/**
 		 * Return the instance
 		 *
-		 * @return Ababilitworld\FlexFoundationByAbabilitworld\Package\Foundation\Foundation\Debug\Error\Helper\Helper
+		 * @return Ababilitworld\FlexFoundationByAbabilitworld\Package\Foundation\Debug\Error\Helper\Helper
 		 */
 		function helper() 
 		{
