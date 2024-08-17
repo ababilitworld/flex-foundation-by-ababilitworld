@@ -1,138 +1,145 @@
 <?php
-    namespace Ababilitworld\FlexFoundationByAbabilitworld\Package\Foundation\Pagination\Helper;
+    namespace AbabilItWorld\FlexPortfolioByAbabilitworld\Package\Portfolio\Presentation\Pagination;
 
     (defined( 'ABSPATH' ) && defined( 'WPINC' )) || exit();
 
-    use Ababilitworld\FlexTraitByAbabilitworld\Standard\Standard;
+	use Ababilitworld\FlexTraitByAbabilitworld\Standard\Standard;
+    use Ababilitworld\FlexPaginationByAbabilitworld\Package\Abstract\Pagination as PaginationHelper;
+	use const AbabilItWorld\FlexPortfolioByAbabilitworld\{
+		PLUGIN_NAME,
+		PLUGIN_DIR,
+        PLUGIN_URL,
+		PLUGIN_FILE,
+		PLUGIN_VERSION
+	};
+    use function Ababilitworld\{
+        FlexPortfolioByAbabilitworld\Package\Portfolio\Presentation\Pagination\Template\template as pagination_template,
+    };
 
-	if ( ! class_exists( __NAMESPACE__.'\Helper' ) ) 
+	if ( ! class_exists( '\AbabilItWorld\FlexPortfolioByAbabilitworld\Package\Portfolio\Presentation\Pagination\Pagination' ) ) 
 	{
 		/**
 		 * Class Helper
 		 *
-		 * @package Ababilitworld\FlexFoundationByAbabilitworld\Package\Foundation\Pagination\Helper\Helper
-		 */		
-		class Helper 
+		 * @package AbabilItWorld\FlexPortfolioByAbabilitworld\Helper
+		 */
+		class Pagination extends PaginationHelper
 		{
-            use Standard;
-            
-			public static function check_array_key_exists( $array, $keys ) 
-			{
-				if ( ! is_array( $array ) || ! is_array( $keys ) || empty( $keys ) ) 
-				{
-					return false;
-				}
-				
-				$current_array = $array;
-				
-				foreach ( $keys as $key ) 
-				{
-					if ( isset( $current_array[ $key ] ) ) 
-					{
-						$current_array = $current_array[ $key ];
-					}
-					else 
-					{
-						return false;
-					}
-				}
-				
-				return true;
-			}
+			use Standard;
 
-			public static function sanitize_data( $data ) 
-			{
-				if ( is_array( $data ) ) 
-				{
-					foreach ( $data as $key => &$value ) 
-					{
-						if ( is_array( $value ) ) 
-						{
-							$value = self::sanitize_data( $value );
-						}
-						else
-						{
-							$value = sanitize_text_field( $value );
-						}
-					}
-				}
-				else
-				{
-					$data = sanitize_text_field( $data );
-				}
-				
-				return $data;
-			}
+            private $paginationTemplate;
 
-			public static function check_plugin($plugin_dir_name,$plugin_file): int 
-			{
-				include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-				$plugin_dir = ABSPATH . 'wp-content/plugins/'.$plugin_dir_name;
-				if ( is_plugin_active( $plugin_dir_name.'/'.$plugin_file ) ) 
-				{
-					return 1;
-				} 
-				elseif ( is_dir( $plugin_dir ) ) 
-				{
-					return 2;
-				} 
-				else 
-				{
-					return 0;
-				}
-			}
+			/**
+			 * Objcet wp_error
+			 *
+			 * @var object
+			 */
+			private $wp_error;
 
-			public static function install_plugin($plugin_file_url) 
-			{
-				include_once( ABSPATH . 'wp-admin/includes/plugin-install.php' );
-				include_once( ABSPATH . 'wp-admin/includes/file.php' );
-				include_once( ABSPATH . 'wp-admin/includes/misc.php' );
-				include_once( ABSPATH . 'wp-admin/includes/class-wp-upgrader.php' );
-				$upgrader = new \Plugin_Upgrader( new \Plugin_Installer_Skin( compact( 'title', 'url', 'nonce', 'plugin', 'api' ) ) );
-				$upgrader->install( $plugin_file_url );
-				//$upgrader->install( 'https://github.com/magepeopleteam/magepeople-pdf-support/archive/master.zip' );
-			}
+			/**
+			 * Objcet wp_function
+			 *
+			 * @var object
+			 */
+			private $wp_function;
+	
+			/**
+			 * Helper version
+			 *
+			 * @var string
+			 */
+			public $version = '1.0.0';
+	
+			/**
+             * Constructor.
+             */
+            public function __construct()
+            {
+                $this->paginationTemplate = pagination_template();
+            }
 
-			public static function download_and_extract_file($romote_file_url,$local_directory_path = ABSPATH . 'wp-content/plugins/',$file_name) 
-			{
-				$download_path = $local_directory_path . $file_name;
-				$response = wp_remote_get( $romote_file_url, array( 'timeout' => 300 ) );
+            /**
+             * Initialize the service with query and attributes.
+             *
+             * @param array $data Initialization data including 'query' and 'attribute'.
+             */
+            public function init($data=null)
+            {
+                
+                $this->query = $data['query'];
+                $this->attribute = $data['attribute'];
+            }
 
-				if ( is_wp_error( $response ) )
-				{
-					echo 'Failed to download file: ' . $response->get_error_message();
-				}
-				else
-				{
-					$file_handle = fopen( $download_path, 'w' );
-					fwrite( $file_handle, $response['body'] );
-					fclose( $file_handle );
-					$zip = new \ZipArchive;
-					if ( $zip->open( $download_path ) === TRUE ) 
-					{
-						$zip->extractTo( $local_directory_path );
-						$zip->close();
-						echo 'File extracted successfully.';
-					}
-					else
-					{
-						echo 'Failed to extract file.';
-					}
+            /**
+             * Paginate the query results.
+             */
+            public function paginate()
+            {
+                
+                $this->currentPage = max(1, intval($this->query->get('paged', 1)));
+                $this->totalPages = intval($this->query->max_num_pages);
+                $this->query->set('paged', $this->currentPage); 
+                $this->paginationLinks = $this->pagination_links();                
+                $this->render();                
+            }
 
-					unlink( $download_path );
-				}
-			}
+            /**
+             * Generate pagination links.
+             *
+             * @return array Pagination links.
+             */
+            public function pagination_links()
+            {
+                $big = 999999999;
+                $base = str_replace($big, '%#%', esc_url(get_pagenum_link($big)));
+
+                if (is_admin()) {
+                    $base = add_query_arg(
+                        array(
+                            'paged' => '%#%',
+                        ),
+                        admin_url('admin.php')
+                    );
+                }
+
+                return paginate_links(
+                    array(
+                        'base' => $base,
+                        'format' => '?paged=%#%',
+                        'current' => $this->currentPage,
+                        'total' => $this->totalPages,
+                        'prev_text' => __('« Previous'),
+                        'next_text' => __('Next »'),
+                        'type' => 'array',
+                    )
+                );
+            }
+
+            /**
+             * Render the pagination.
+             */
+            public function render()
+            {
+                //$paginationTemplate = pagination_template();
+                //echo "<pew>";print_r($this->paginationLinks);echo "</pre>";exit;
+                $this->paginationTemplate::default_pagination_template(
+                    array(
+                        'paged' => $this->currentPage,
+                        'pagination_links' => $this->paginationLinks,
+                    )
+                );
+            }
 	
 		}
-
+	
 		/**
 		 * Return the instance
 		 *
-		 * @return \Ababilitworld\FlexFoundationByAbabilitworld\Package\Foundation\Pagination\Helper\Helper
+		 * @return \AbabilItWorld\FlexPortfolioByAbabilitworld\Package\Portfolio\Presentation\Pagination\Pagination
 		 */
-		function helper() 
+		function pagination() 
 		{
-			return Helper::instance();
+			return Pagination::instance();
 		}
 	}
 	
