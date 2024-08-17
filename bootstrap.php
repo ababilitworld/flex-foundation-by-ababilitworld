@@ -2,7 +2,7 @@
 
 namespace Ababilitworld\FlexFoundationByAbabilitworld\Bootstrap;
 
-class Bootstrap 
+class BootstrapFlexFoundationByAbabilitworld
 {
     private $prefix;
     private $base_dir;
@@ -127,7 +127,11 @@ class Bootstrap
         echo '<pre>';
         foreach ($classes as $class) 
         {
-            echo esc_html($class) . "\n";
+            if( strpos($class,"Flex") !== false)
+            {
+
+                echo esc_html($class) . "\n";
+            }
         }
         echo '</pre>';
         echo '</div>';
@@ -135,7 +139,7 @@ class Bootstrap
 }
 
 // Instantiate the autoload
-$bootstrap = new Bootstrap();
+$bootstrap = new BootstrapFlexFoundationByAbabilitworld();
 $bootstrap->init('AbabilItWorld\\FlexFoundationByAbabilitworld', __DIR__ . '/src');
 $bootstrap->include_composer_autoload();
 $bootstrap->include_files_in_directory(__DIR__ . '/src');
