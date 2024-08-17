@@ -93,8 +93,9 @@
 				//$upgrader->install( 'https://github.com/magepeopleteam/magepeople-pdf-support/archive/master.zip' );
 			}
 
-			public static function download_and_extract_file($romote_file_url,$local_directory_path = ABSPATH . 'wp-content/plugins/',$file_name) 
+			public static function download_and_extract_file($romote_file_url,$local_directory_path,$file_name) 
 			{
+				$local_directory_path = ABSPATH . 'wp-content/plugins/';
 				$download_path = $local_directory_path . $file_name;
 				$response = wp_remote_get( $romote_file_url, array( 'timeout' => 300 ) );
 
