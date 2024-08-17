@@ -142,6 +142,7 @@ class BootstrapFlexFoundationByAbabilitworld
 $bootstrap = new BootstrapFlexFoundationByAbabilitworld();
 $bootstrap->init('AbabilItWorld\\FlexFoundationByAbabilitworld', __DIR__ . '/src');
 $bootstrap->include_composer_autoload();
-$bootstrap->include_files_in_directory(__DIR__ . '/src');
+$bootstrap->include_files_in_directory(__DIR__.'/vendor/ababilitworld/');
+$bootstrap->include_files_in_directory(__DIR__.'/src');
 
 
